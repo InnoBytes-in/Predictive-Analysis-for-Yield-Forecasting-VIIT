@@ -62,7 +62,7 @@ class Crop(Enum):
     Wheat = "Crop_Wheat"
 
 
-def maharashtra_dict(area, district: District, season: Season, crop: Crop):
+def maharashtra_dict(area: int | float, district: District, season: Season, crop: Crop):
     mh_dict = {
         "area": 0,
         District.AKOLA.value: 0,
@@ -122,8 +122,8 @@ def maharashtra_dict(area, district: District, season: Season, crop: Crop):
     return input_arr
 
 
-def predict(area, district_name, season_name, crop_name):
-    arr = maharashtra_dict(area, district_name, season_name, crop_name)
+def predict(area: int | float, district: District, season: Season, crop: Crop):
+    arr = maharashtra_dict(area, district, season, crop)
     result = model.predict([arr])
     return result
 
