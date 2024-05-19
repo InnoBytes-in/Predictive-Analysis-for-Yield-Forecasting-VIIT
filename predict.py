@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pickle
 import numpy as np
 from enum import Enum
@@ -139,14 +141,12 @@ crops = [e.name for e in Crop]
 interface = gr.Interface(
     fn=predict,
     inputs=[
-        gr.Textbox(label="Area"),
+        gr.Textbox(label="Area (Hectares)"),
         gr.Dropdown(choices=districts, label="District"),
         gr.Dropdown(choices=seasons, label="Season"),
         gr.Dropdown(choices=crops, label="Crop"),
     ],
-    outputs=[
-        gr.Textbox(label="Yield in tonnes")
-    ],
+    outputs=[gr.Textbox(label="Yield (tonnes)")],
     title="Maharashtra Crop Yield Prediction",
     description="Predict crop yield based on area, district, season, and crop.",
 )
