@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 from enum import Enum
+import gradio as gr
 
 filename = "Maharashtra_Model.sav"
 model = pickle.load(open(filename, "rb"))
@@ -122,10 +123,33 @@ def maharashtra_dict(area: int | float, district: District, season: Season, crop
     return input_arr
 
 
-def predict(area: int | float, district: District, season: Season, crop: Crop):
-    arr = maharashtra_dict(area, district, season, crop)
+def predict(area, district, season, crop):
+    district_enum = District[district]
+    season_enum = Season[season]
+    crop_enum = Crop[crop]
+    arr = maharashtra_dict(area, district_enum, season_enum, crop_enum)
     result = model.predict([arr])
-    return result
+    return f"The yield will be {result[0]} Tonnes."
 
 
-print(predict(31500, District.NANDED, Season.Rabi, Crop.Wheat))
+districts = [e.name for e in District]
+seasons = [e.name.strip() for e in Season]
+crops = [e.name for e in Crop]
+
+interface = gr.Interface(
+    fn=predict,
+    inputs=[
+        gr.Textbox(label="Area"),
+        gr.Dropdown(choices=districts, label="District"),
+        gr.Dropdown(choices=seasons, label="Season"),
+        gr.Dropdown(choices=crops, label="Crop"),
+    ],
+    outputs=[
+        gr.Textbox(label="Yield in tonnes")
+    ],
+    title="Maharashtra Crop Yield Prediction",
+    description="Predict crop yield based on area, district, season, and crop.",
+)
+
+if __name__ == "__main__":
+    interface.launch()
